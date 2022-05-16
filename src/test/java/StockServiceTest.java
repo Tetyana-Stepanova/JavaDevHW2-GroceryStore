@@ -6,6 +6,10 @@ import service.StockService;
 import java.util.*;
 
 public class StockServiceTest {
+
+    //the StockService has ReadStock class as internal dependency.
+    //you have to use Mockito to mock calls to the class
+    //here is simple example https://pastebin.com/1zSjHTC2
     StockService stockService = new StockService();
 
     @Test

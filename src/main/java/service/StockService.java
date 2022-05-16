@@ -49,6 +49,7 @@ public class StockService {
             if (productQuantity % productByKey.getPromAmount() == 0) {
                 cost = ((int) productQuantity / productByKey.getPromAmount()) * productByKey.getPromPrice();
             } else {
+                //it would be nice to extract such calculations to extra private method
                 cost = (Math.floor(productQuantity / productByKey.getPromAmount())) * productByKey.getPromPrice() +
                         (productQuantity % productByKey.getPromAmount()) * productByKey.getPrice();
             }
