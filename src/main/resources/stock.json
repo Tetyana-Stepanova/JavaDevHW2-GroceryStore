@@ -1,0 +1,26 @@
+[
+  {
+    "productName" : "A",
+    "price" : 1.25,
+    "promAmount" : 3,
+    "promPrice" : 3.00
+  },
+  {
+    "productName" : "B",
+    "price" : 4.25,
+    "promAmount" : 0,
+    "promPrice" : 0.00
+  },
+  {
+    "productName" : "C",
+    "price" : 1.00,
+    "promAmount" : 6,
+    "promPrice" : 5.00
+  },
+  {
+    "productName" : "D",
+    "price" : 0.75,
+    "promAmount" : 0,
+    "promPrice" : 0.00
+  }
+]
