@@ -16,6 +16,10 @@ public class Product {
         this.promPrice = promPrice;
     }
 
+    public boolean hasPromotion(){
+     return this.promAmount != 0;
+    }
+
     public String toString() {
         return productName + "," + price + "," + promAmount + "," + promPrice;
     }

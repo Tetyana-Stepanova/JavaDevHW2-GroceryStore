@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 public class StockService {
     private ReadStock readStock = new ReadStock();
 
+    public void setReadStock(ReadStock readStock){
+        this.readStock = readStock;
+    }
+
     public void printBasketCost(String basket) {
         System.out.println("Basket cost = " + calculateTotalCost(basket));
     }
@@ -36,25 +40,32 @@ public class StockService {
                     return "There is unknown product in your basket";
                 } else {
                     Product productByKey = actualStock.stream().filter(product -> product.getProductName().equals(key)).findFirst().get();
-                    totalCost += calculate(productByKey, basketMap.get(key).intValue());
+                    totalCost += calculateCostOfOneTypeProduct(productByKey, basketMap.get(key).intValue());
                 }
             }
             return String.valueOf(totalCost);
         }
     }
 
-    public double calculate(Product productByKey, Integer productQuantity) {
-        double cost = 0.0;
-        if (productByKey.getPromAmount() != 0) {
-            if (productQuantity % productByKey.getPromAmount() == 0) {
-                cost = ((int) productQuantity / productByKey.getPromAmount()) * productByKey.getPromPrice();
-            } else {
-                cost = (Math.floor(productQuantity / productByKey.getPromAmount())) * productByKey.getPromPrice() +
-                        (productQuantity % productByKey.getPromAmount()) * productByKey.getPrice();
-            }
+    public double calculateCostOfOneTypeProduct(Product productByKey, Integer productQuantity) {
+        double cost;
+        if (productByKey.hasPromotion()) {
+            cost = calculatePromotionCost(productByKey, productQuantity);
         } else {
             cost = productQuantity * productByKey.getPrice();
         }
         return cost;
+
+    }
+
+    private double calculatePromotionCost(Product product, Integer quantity) {
+        double costOfPromProduct;
+        if (quantity % product.getPromAmount() == 0) {
+            costOfPromProduct = ((int) quantity / product.getPromAmount()) * product.getPromPrice();
+        } else {
+            costOfPromProduct = (Math.floor(quantity / product.getPromAmount())) * product.getPromPrice() +
+                    (quantity % product.getPromAmount()) * product.getPrice();
+        }
+        return costOfPromProduct;
     }
 }

@@ -1,51 +1,69 @@
 import model.Product;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import service.StockService;
+import util.ReadStock;
 
+import java.io.IOException;
 import java.util.*;
 
-public class StockServiceTest {
-    StockService stockService = new StockService();
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    @Test
-    public void printBasketCost(){
-        stockService.printBasketCost("ABCD");
+public class StockServiceTest {
+
+    private ReadStock readStockMock;
+    private StockService stockService = new StockService();
+
+
+    @BeforeEach
+    public void init() throws IOException {
+        readStockMock = Mockito.mock(ReadStock.class);
+        stockService.setReadStock(readStockMock);
+
+        Mockito.when(readStockMock.readAndMapJsonToListProducts()).
+                thenReturn((List<Product>) List.of(new Product("F", 1.25, 3, 3.0),
+                                                   new Product("N", 4.25, 0, 0.0)));
     }
 
     @Test
-    public void calculateTotalCost(){
+    public void printBasketCost() {
+        stockService.printBasketCost("FN");
+    }
+
+    @Test
+    public void calculateTotalCost() {
         Map<String, Double> checkValue = new HashMap<>();
-        checkValue.put("ABCD", 7.25);
-        checkValue.put("AAABCCCCCCD", 13.0);
-        checkValue.put("AAAA", 4.25);
-        checkValue.put("CCCCCCC", 6.0);
-        checkValue.put("  AAAAA B CCCCCCCC D", 17.5);
+        checkValue.put("F", 1.25);
+        checkValue.put("FFF", 3.0);
+        checkValue.put("FFFF", 4.25);
+        checkValue.put("FFFFNN", 12.75);
 
         checkValue.forEach((key, value) ->
-                Assertions.assertEquals(Double.valueOf(stockService.calculateTotalCost(key)), checkValue.get(key)));
+                assertEquals(Double.valueOf(stockService.calculateTotalCost(key)), checkValue.get(key)));
     }
 
     @Test
-    public void calculateTotalCost_CheckExceptions(){
-       Map<String, String> checkExceptions = new HashMap<>();
-       checkExceptions.put("", "You basket is empty");
-       checkExceptions.put(null, "You basket is empty");
-       checkExceptions.put("ANMCDTY", "There is unknown product in your basket");
+    public void calculateTotalCost_CheckExceptions() {
+        Map<String, String> checkExceptions = new HashMap<>();
+        checkExceptions.put("", "You basket is empty");
+        checkExceptions.put(null, "You basket is empty");
+        checkExceptions.put("FKLMNVX", "There is unknown product in your basket");
 
-       checkExceptions.forEach((key, value) ->
-               Assertions.assertEquals(checkExceptions.get(key), stockService.calculateTotalCost(key)));
+        checkExceptions.forEach((key, value) ->
+                assertEquals(checkExceptions.get(key), stockService.calculateTotalCost(key)));
     }
+
     @Test
-    public void calculate(){
+    public void calculate() {
         Product productA = new Product("A", 1.25, 3, 3.0);
-        double resultA = stockService.calculate(productA, 1);
-        Assertions.assertEquals(resultA, 1.25);
+        double resultA = stockService.calculateCostOfOneTypeProduct(productA, 1);
+        assertEquals(resultA, 1.25);
 
-        double resultAAA = stockService.calculate(productA, 3);
-        Assertions.assertEquals(resultAAA, 3.0);
+        double resultAAA = stockService.calculateCostOfOneTypeProduct(productA, 3);
+        assertEquals(resultAAA, 3.0);
 
-        double resultAAAA = stockService.calculate(productA, 4);
-        Assertions.assertEquals(resultAAAA, 4.25);
+        double resultAAAA = stockService.calculateCostOfOneTypeProduct(productA, 4);
+        assertEquals(resultAAAA, 4.25);
     }
 }
