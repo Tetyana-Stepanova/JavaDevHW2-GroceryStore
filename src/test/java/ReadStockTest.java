@@ -14,6 +14,8 @@ public class ReadStockTest {
     public void readAndMapJsonToListProducts() throws IOException {
         List<Product> productList = readStock.readAndMapJsonToListProducts();
         assertFalse(productList.isEmpty());
+        //printing shouldn't be a part of the test
+        //we have to use asserts to compare with expected values
         productList.forEach(System.out::println);
     }
 }

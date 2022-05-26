@@ -28,6 +28,7 @@ public class StockServiceTest {
 
     @Test
     public void printBasketCost() {
+        //what are we testing here? You have to add any assert
         stockService.printBasketCost("FN");
     }
 
