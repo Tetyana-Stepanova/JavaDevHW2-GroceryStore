@@ -4,17 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import service.StockService;
 import util.ReadStock;
-
 import java.io.IOException;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StockServiceTest {
 
     private ReadStock readStockMock;
     private StockService stockService = new StockService();
-
 
     @BeforeEach
     public void init() throws IOException {
@@ -26,10 +23,6 @@ public class StockServiceTest {
                                                    new Product("N", 4.25, 0, 0.0)));
     }
 
-    @Test
-    public void printBasketCost() {
-        stockService.printBasketCost("FN");
-    }
 
     @Test
     public void calculateTotalCost() {
